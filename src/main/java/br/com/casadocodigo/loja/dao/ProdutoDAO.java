@@ -1,10 +1,12 @@
 package br.com.casadocodigo.loja.dao;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
@@ -27,6 +29,15 @@ public class ProdutoDAO {
 	public List<Produto> listar() {
 		return manager.createQuery("select distinct(p) from Produto p join fetch p.precos", Produto.class)
 				.getResultList();
+	}
+	
+	public List<Produto> listarComData(Calendar data) {
+		
+		
+		return manager.createQuery("select distinct(p) from Produto p join fetch p.precos preco where p.dataLancamento >= :data", Produto.class)
+				.setParameter("data", data).getResultList();
+		
+		
 	}
 
 	public Produto find(Integer id) {
