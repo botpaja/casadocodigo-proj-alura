@@ -29,13 +29,16 @@ public class RelatorioProdutoController {
 //		return produtoDao.listar();
 //	}
 //	
-	@RequestMapping(method=RequestMethod.GET)
+	@RequestMapping(method=RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public Relatorio relatorioJsonComData(@RequestParam(value="data", required=false)String dataString) throws ParseException {
 		Relatorio relatorio = new Relatorio();
 		
 		if(dataString == null) {
 			relatorio.setProdutos(produtoDao.listar());
+	        
+	        relatorio.setQuantidade(relatorio.getProdutos().size());
+	        relatorio.setDataGeracao(Calendar.getInstance());
 			return relatorio;
 		}
 		

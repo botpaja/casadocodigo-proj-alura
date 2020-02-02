@@ -17,6 +17,8 @@ import org.springframework.format.datetime.DateFormatter;
 import org.springframework.format.datetime.DateFormatterRegistrar;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.accept.ContentNegotiationManager;
@@ -40,9 +42,10 @@ import br.com.casadocodigo.loja.controllers.HomeController;
 import br.com.casadocodigo.loja.dao.ProdutoDAO;
 import br.com.casadocodigo.loja.infra.FileSaver;
 import br.com.casadocodigo.loja.models.CarrinhoCompras;
+import br.com.casadocodigo.loja.validation.UsuarioValidation;
 
 @EnableWebMvc
-@ComponentScan(basePackageClasses = { HomeController.class, ProdutoDAO.class, FileSaver.class, CarrinhoCompras.class })
+@ComponentScan(basePackageClasses = { HomeController.class, ProdutoDAO.class, FileSaver.class, CarrinhoCompras.class, UsuarioValidation.class })
 @EnableCaching
 @EnableAspectJAutoProxy(proxyTargetClass = true) 
 public class AppWebConfiguration extends WebMvcConfigurerAdapter {
@@ -139,4 +142,14 @@ public class AppWebConfiguration extends WebMvcConfigurerAdapter {
 		
 		return mailSender;
 	}
+	
+	@Override
+	 public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+	     for ( HttpMessageConverter<?> converter : converters ) {
+	         if ( converter instanceof MappingJackson2HttpMessageConverter) {
+	             MappingJackson2HttpMessageConverter jacksonConverter = (MappingJackson2HttpMessageConverter) converter;
+	             jacksonConverter.setPrettyPrint(true);
+	         }
+	     }
+	 }
 }

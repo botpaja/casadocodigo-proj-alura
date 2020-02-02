@@ -23,6 +23,7 @@ public class Usuario implements UserDetails {
 	private String email;
 	private String senha;
 	private String nome;
+	private String senhaRepetida;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "Usuario_Role",
@@ -57,6 +58,25 @@ public class Usuario implements UserDetails {
 	public List<Role> getRoles() {
 		return roles;
 	}
+	
+	public String imprimeRoles() {
+		String lista = "";
+		
+		for (int i=0 ; i < roles.size(); i++ ) {
+			
+			if(roles.size() != i+1 && roles.size() >= 2) {
+				lista += roles.get(i).getNome() + ", ";
+			} else {
+				lista += roles.get(i).getNome();
+			}
+		}
+		
+		return lista;
+	}
+	
+	public void adicionaRole(Role role) {
+		this.roles.add(role);
+	}
 
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
@@ -75,6 +95,14 @@ public class Usuario implements UserDetails {
 	@Override
 	public String getUsername() {
 		return this.email;
+	}
+
+	public String getSenhaRepetida() {
+		return senhaRepetida;
+	}
+
+	public void setSenhaRepetida(String senhaRepetida) {
+		this.senhaRepetida = senhaRepetida;
 	}
 
 	@Override
